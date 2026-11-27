@@ -1,0 +1,277 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>CA Study Room</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;600&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+:root{--paper:#EDF1EA;--card:#FAFCF8;--ink:#17262B;--mute:#5C6E69;--rule:#C3D2C8;--teal:#1F5F5B;--amber:#F2B632;--red:#B3412F}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font:16px/1.5 'IBM Plex Sans',system-ui,sans-serif}
+h1,h2{margin:0;font-weight:600}
+button,input,select{font:inherit;color:inherit}
+button{cursor:pointer;border:1px solid var(--teal);background:var(--teal);color:#fff;padding:.45rem .9rem;border-radius:4px}
+button.ghost{background:transparent;color:var(--teal)}
+button.x{border:0;background:none;color:var(--mute);padding:0 .4rem}
+button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid var(--amber);outline-offset:1px}
+input,select{border:1px solid var(--rule);background:#fff;padding:.45rem .6rem;border-radius:4px;min-width:0}
+.wrap{max-width:1000px;margin:0 auto;padding:1rem}
+.top{display:flex;justify-content:space-between;align-items:center;gap:1rem;flex-wrap:wrap;padding:.5rem 0 1rem}
+.top small{color:var(--mute)}
+.hero{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+@media(max-width:700px){.hero{grid-template-columns:1fr}}
+.card{background:var(--card);border:1px solid var(--rule);border-radius:6px;padding:1rem}
+.ledger{background-image:repeating-linear-gradient(transparent 0 31px,#DCE6DE 31px 32px)}
+.num{font:500 clamp(3.5rem,12vw,5.5rem)/1 'IBM Plex Mono',monospace;color:var(--teal)}
+.clock{font:500 clamp(3rem,10vw,4.5rem)/1 'IBM Plex Mono',monospace}
+.row{display:flex;gap:.5rem;flex-wrap:wrap;align-items:center;margin:.6rem 0}
+.row>input:first-child{flex:1}
+.modes button{background:transparent;color:var(--ink);border-color:var(--rule)}
+.modes button.on{background:var(--amber);border-color:var(--amber)}
+nav{display:flex;gap:.25rem;margin:1.2rem 0 .6rem;overflow-x:auto;border-bottom:2px solid var(--rule)}
+nav button{background:none;color:var(--mute);border:0;border-radius:0;padding:.6rem 1rem;white-space:nowrap}
+nav button.on{color:var(--ink);font-weight:600;box-shadow:inset 0 -3px var(--teal)}
+section{display:none}section.on{display:block}
+ul{list-style:none;margin:0;padding:0}
+li{display:flex;align-items:center;gap:.6rem;padding:.5rem 0;border-bottom:1px solid var(--rule)}
+li .g{flex:1}li small{color:var(--mute)}
+.done span{text-decoration:line-through;color:var(--mute)}
+.cal{display:grid;grid-template-columns:repeat(7,1fr);gap:2px}
+.cal b{font-weight:600;text-align:center;color:var(--mute);font-size:.85rem}
+.d{min-height:74px;background:#fff;border:1px solid var(--rule);padding:3px;font-size:.78rem;cursor:pointer;overflow:hidden}
+.d.t{border:2px solid var(--teal)}.d.e{background:#FBE9D9;border-color:var(--red)}.d.o{background:transparent;border-color:transparent;cursor:default}
+.ev{display:block;background:var(--amber);border-radius:3px;margin-top:2px;padding:0 3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.lb li{font-size:1.1rem}.rk{font:500 1.3rem 'IBM Plex Mono',monospace;width:2rem;color:var(--teal)}
+.min{font-family:'IBM Plex Mono',monospace}
+#gate{position:fixed;inset:0;background:rgba(23,38,43,.6);display:flex;align-items:center;justify-content:center;padding:1rem;z-index:5}
+#gate .card{max-width:380px;width:100%}#gate input{width:100%;margin:.4rem 0 .8rem}
+#alert{position:sticky;top:0;background:var(--amber);padding:.6rem 1rem;display:none;justify-content:space-between;z-index:4}
+.note{color:var(--mute);font-size:.9rem}
+</style>
+</head>
+<body>
+<div id="alert"><span id="alertTxt"></span><button class="ghost" onclick="this.parentNode.style.display='none'">Dismiss</button></div>
+
+<div id="gate"><div class="card">
+  <h2>Join the study room</h2>
+  <p class="note" id="modeNote"></p>
+  <label>Your name<input id="gName" maxlength="20" autocomplete="off"></label>
+  <label>Room code (same for all 5 of you)<input id="gRoom" maxlength="30" autocomplete="off"></label>
+  <button onclick="join()">Join</button>
+</div></div>
+
+<div class="wrap">
+  <div class="top"><div><h1>CA Study Room</h1><small id="who"></small></div><button class="ghost" onclick="leave()">Switch user</button></div>
+
+  <div class="hero">
+    <div class="card ledger">
+      <h2>Days to exam</h2>
+      <div class="num" id="days">--</div>
+      <div class="row"><input type="date" id="exam" aria-label="Exam date"><button class="ghost" onclick="setExam()">Save exam date</button></div>
+      <div class="note">The date is shared with everyone in the room.</div>
+    </div>
+    <div class="card">
+      <h2>Focus timer</h2>
+      <div class="row modes"><button id="m-focus" class="on" onclick="setMode('focus')">Focus 25</button><button id="m-break" onclick="setMode('break')">Break 5</button></div>
+      <div class="clock" id="clock">25:00</div>
+      <div class="row"><input id="subj" placeholder="Subject (e.g. FR, Audit)" aria-label="Subject"><button id="start" onclick="go()">Start</button><button class="ghost" onclick="setMode(mode)">Reset</button></div>
+      <div class="note">A finished focus session is added to your log automatically.</div>
+    </div>
+  </div>
+
+  <nav id="tabs">
+    <button data-t="plan" class="on">Daily plan</button><button data-t="cal">Calendar</button><button data-t="log">Study log</button><button data-t="rem">Reminders</button><button data-t="lb">Leaderboard</button>
+  </nav>
+
+  <section id="plan" class="on card">
+    <div class="row"><input id="taskIn" placeholder="What will you finish today?"><button onclick="addTask()">Add task</button></div>
+    <ul id="l-plan"></ul>
+    <h2 style="margin-top:1.2rem;font-size:1rem">Everyone today</h2><ul id="l-team"></ul>
+  </section>
+
+  <section id="cal" class="card">
+    <div class="row"><button class="ghost" onclick="mv(-1)">Previous</button><b id="mTitle" style="flex:1;text-align:center"></b><button class="ghost" onclick="mv(1)">Next</button></div>
+    <div class="cal" id="grid"></div>
+    <p class="note">Tap a day to add an event for the whole room. Tap an event to delete it.</p>
+  </section>
+
+  <section id="log" class="card">
+    <div class="row"><input id="lSub" placeholder="Subject"><input id="lMin" type="number" min="1" max="600" placeholder="Minutes" style="width:110px"><input id="lNote" placeholder="Note (optional)"><button onclick="addLog()">Add to log</button></div>
+    <ul id="l-log"></ul>
+  </section>
+
+  <section id="rem" class="card">
+    <div class="row"><input id="rTxt" placeholder="Reminder (e.g. Mock test at 6pm)"><input id="rAt" type="datetime-local"><button onclick="addRem()">Add reminder</button></div>
+    <p class="note">Reminders show up for everyone while the site is open in a tab.</p>
+    <ul id="l-rem"></ul>
+  </section>
+
+  <section id="lb" class="card">
+    <div class="row"><select id="lbRange" onchange="render()"><option value="w">This week</option><option value="d">Today</option><option value="a">All time</option></select></div>
+    <ul class="lb" id="l-lb"></ul>
+  </section>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/10.12.2/firebase-app-compat.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/10.12.2/firebase-firestore-compat.min.js"></script>
+<script>
+/* PASTE YOUR FIREBASE CONFIG HERE (see setup steps). Leave as null to test on one device only. */
+const FIREBASE_CONFIG = {
+  apiKey: "AIzaSyCcuzKAa48Zc2vX2HKX0fZTKDTtT7XuHtg",
+  authDomain: "my-personal-project-f2dfd.firebaseapp.com",
+  projectId: "my-personal-project-f2dfd",
+  storageBucket: "my-personal-project-f2dfd.firebasestorage.app",
+  messagingSenderId: "88296209743",
+  appId: "1:88296209743:web:86d7f995b619de74db593a"
+};
+/* e.g. const FIREBASE_CONFIG = {apiKey:"...",authDomain:"...",projectId:"...",appId:"..."}; */
+
+const $=s=>document.querySelector(s),esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const today=()=>new Date().toLocaleDateString('en-CA');
+const wk=()=>{const d=new Date();d.setDate(d.getDate()-((d.getDay()+6)%7));return d.toLocaleDateString('en-CA')};
+const cols=['plan','logs','events','reminders'];
+const data={plan:[],logs:[],events:[],reminders:[]};let cfg={};
+let me=localStorage.getItem('cs_me')||'',room=localStorage.getItem('cs_room')||'',store;
+$('#modeNote').textContent=FIREBASE_CONFIG?'Your data is shared live with everyone using this room code.':'Test mode: data stays on this device only. Add your Firebase config to share between all 5 of you.';
+
+function initStore(){
+  if(FIREBASE_CONFIG){
+    if(!firebase.apps.length)firebase.initializeApp(FIREBASE_CONFIG);
+    const base=firebase.firestore().collection('rooms').doc(room);
+    store={
+      add:(c,o)=>base.collection(c).add({...o,ts:Date.now()}),
+      upd:(c,id,o)=>base.collection(c).doc(id).update(o),
+      del:(c,id)=>base.collection(c).doc(id).delete(),
+      setCfg:o=>base.collection('meta').doc('cfg').set(o,{merge:true}),
+      listen(){
+        cols.forEach(c=>base.collection(c).onSnapshot(s=>{data[c]=s.docs.map(d=>({id:d.id,...d.data()}));render()}));
+        base.collection('meta').doc('cfg').onSnapshot(d=>{cfg=d.data()||{};render()});
+      }
+    };
+  }else{
+    const k='cs_db_'+room;let db=JSON.parse(localStorage.getItem(k)||'{}');
+    const sync=()=>{cols.forEach(c=>data[c]=db[c]||[]);cfg=db.cfg||{};render()};
+    const save=()=>{localStorage.setItem(k,JSON.stringify(db));sync()};
+    store={
+      add:(c,o)=>{(db[c]=db[c]||[]).push({...o,ts:Date.now(),id:''+Math.random()});save()},
+      upd:(c,id,o)=>{Object.assign(db[c].find(x=>x.id==id),o);save()},
+      del:(c,id)=>{db[c]=db[c].filter(x=>x.id!=id);save()},
+      setCfg:o=>{db.cfg={...db.cfg,...o};save()},
+      listen:sync
+    };
+  }
+  store.listen();
+}
+function join(){
+  const n=$('#gName').value.trim(),r=$('#gRoom').value.trim().toLowerCase().replace(/[^a-z0-9_-]/g,'');
+  if(!n||!r){alert('Enter your name and a room code (letters and numbers).');return}
+  localStorage.setItem('cs_me',n);localStorage.setItem('cs_room',r);location.reload();
+}
+function leave(){localStorage.removeItem('cs_me');localStorage.removeItem('cs_room');location.reload()}
+if(me&&room){$('#gate').style.display='none';$('#who').textContent=me+' in room "'+room+'"';initStore()}
+else{$('#gName').value=me;$('#gRoom').value=room}
+
+/* Tabs */
+$('#tabs').onclick=e=>{const t=e.target.dataset.t;if(!t)return;
+  document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('on',b===e.target));
+  document.querySelectorAll('section').forEach(s=>s.classList.toggle('on',s.id===t));};
+
+/* Countdown */
+function setExam(){const v=$('#exam').value;if(v)store.setCfg({exam:v})}
+function paintDays(){
+  if(!cfg.exam){$('#days').textContent='--';return}
+  $('#exam').value=cfg.exam;
+  const t=new Date();t.setHours(0,0,0,0);
+  $('#days').textContent=Math.max(0,Math.round((new Date(cfg.exam+'T00:00')-t)/864e5));
+}
+
+/* Pomodoro */
+const D={focus:25,break:5};let mode='focus',left=1500,end=0,tick=null;
+function paintClock(){const t=String(Math.floor(left/60)).padStart(2,'0')+':'+String(left%60).padStart(2,'0');$('#clock').textContent=t;document.title=(tick?t+' · ':'')+'CA Study Room'}
+function setMode(m){mode=m;clearInterval(tick);tick=null;left=D[m]*60;$('#start').textContent='Start';
+  $('#m-focus').classList.toggle('on',m=='focus');$('#m-break').classList.toggle('on',m=='break');paintClock()}
+function go(){
+  if(tick){clearInterval(tick);tick=null;$('#start').textContent='Resume';paintClock();return}
+  if('Notification' in window&&Notification.permission==='default')Notification.requestPermission();
+  end=Date.now()+left*1000;$('#start').textContent='Pause';
+  tick=setInterval(()=>{left=Math.max(0,Math.round((end-Date.now())/1000));paintClock();if(!left)finish()},500);
+}
+function finish(){
+  const was=mode;
+  if(was=='focus'&&me)store.add('logs',{name:me,subject:$('#subj').value.trim()||'Focus session',min:D.focus,date:today(),pomo:1});
+  ping(was=='focus'?'Focus session done. Take a 5 minute break.':'Break over. Back to work.');
+  setMode(was=='focus'?'break':'focus');
+}
+function ping(msg){
+  $('#alertTxt').textContent=msg;$('#alert').style.display='flex';
+  try{const a=new AudioContext(),o=a.createOscillator();o.connect(a.destination);o.frequency.value=660;o.start();o.stop(a.currentTime+.4)}catch(e){}
+  if('Notification' in window&&Notification.permission==='granted')new Notification('CA Study Room',{body:msg});
+}
+
+/* Daily plan */
+function addTask(){const t=$('#taskIn').value.trim();if(!t)return;store.add('plan',{name:me,text:t,date:today(),done:false});$('#taskIn').value=''}
+$('#taskIn').onkeydown=e=>{if(e.key=='Enter')addTask()};
+function renderPlan(){
+  const mine=data.plan.filter(p=>p.name==me&&p.date==today()).sort((a,b)=>a.ts-b.ts);
+  $('#l-plan').innerHTML=mine.map(p=>`<li class="${p.done?'done':''}"><input type="checkbox" ${p.done?'checked':''} onchange="store.upd('plan','${p.id}',{done:this.checked})" aria-label="Done"><span class="g"><span>${esc(p.text)}</span></span><button class="x" onclick="store.del('plan','${p.id}')" aria-label="Delete task">✕</button></li>`).join('')||'<li class="note">No tasks yet. Add your first one above.</li>';
+  const by={};data.plan.filter(p=>p.date==today()).forEach(p=>{(by[p.name]=by[p.name]||[0,0])[1]++;if(p.done)by[p.name][0]++});
+  $('#l-team').innerHTML=Object.entries(by).map(([n,v])=>`<li><span class="g">${esc(n)}</span><span class="min">${v[0]}/${v[1]} done</span></li>`).join('')||'<li class="note">Nobody has planned today yet.</li>';
+}
+
+/* Calendar */
+let cm=new Date();cm.setDate(1);
+function mv(n){cm.setMonth(cm.getMonth()+n);renderCal()}
+function renderCal(){
+  const y=cm.getFullYear(),m=cm.getMonth(),first=(new Date(y,m,1).getDay()+6)%7,n=new Date(y,m+1,0).getDate();
+  $('#mTitle').textContent=cm.toLocaleDateString('en-IN',{month:'long',year:'numeric'});
+  let h=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'].map(d=>`<b>${d}</b>`).join('');
+  for(let i=0;i<first;i++)h+='<div class="d o"></div>';
+  for(let d=1;d<=n;d++){
+    const ds=`${y}-${String(m+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+    const ev=data.events.filter(e=>e.date==ds),ex=cfg.exam==ds;
+    h+=`<div class="d ${ds==today()?'t':''} ${ex?'e':''}" onclick="addEv('${ds}')">${d}${ex?' <b style="color:var(--red)">Exam</b>':''}${ev.map(e=>`<span class="ev" title="${esc(e.text)}" onclick="event.stopPropagation();delEv('${e.id}','${esc(e.text).replace(/'/g,'')}')">${esc(e.text)}</span>`).join('')}</div>`;
+  }
+  $('#grid').innerHTML=h;
+}
+function addEv(ds){const t=prompt('Event for '+ds+' (e.g. Mock test, Group revision):');if(t&&t.trim())store.add('events',{date:ds,text:t.trim(),name:me})}
+function delEv(id,t){if(confirm('Delete "'+t+'"?'))store.del('events',id)}
+
+/* Study log */
+function addLog(){
+  const s=$('#lSub').value.trim(),m=parseInt($('#lMin').value,10);
+  if(!s||!m||m<1){alert('Enter a subject and the minutes studied.');return}
+  store.add('logs',{name:me,subject:s,min:m,note:$('#lNote').value.trim(),date:today()});
+  ['#lSub','#lMin','#lNote'].forEach(i=>$(i).value='');
+}
+function renderLog(){
+  $('#l-log').innerHTML=[...data.logs].sort((a,b)=>b.ts-a.ts).slice(0,40).map(l=>`<li><span class="g"><b>${esc(l.name)}</b> studied ${esc(l.subject)}${l.note?' <small>– '+esc(l.note)+'</small>':''}<br><small>${l.date}${l.pomo?' · focus session':''}</small></span><span class="min">${l.min} min</span>${l.name==me?`<button class="x" onclick="store.del('logs','${l.id}')" aria-label="Delete entry">✕</button>`:''}</li>`).join('')||'<li class="note">No study sessions logged yet.</li>';
+}
+
+/* Reminders */
+function addRem(){const t=$('#rTxt').value.trim(),a=$('#rAt').value;if(!t||!a){alert('Add the reminder text and a date and time.');return}store.add('reminders',{text:t,at:a,name:me});$('#rTxt').value=''}
+function renderRem(){
+  const now=new Date().toISOString().slice(0,16),list=[...data.reminders].sort((a,b)=>a.at<b.at?-1:1);
+  $('#l-rem').innerHTML=list.map(r=>`<li><span class="g">${esc(r.text)}<br><small>${r.at.replace('T',' ')} · added by ${esc(r.name)}</small></span>${new Date(r.at)<new Date()?'<small>Past</small>':''}<button class="x" onclick="store.del('reminders','${r.id}')" aria-label="Delete reminder">✕</button></li>`).join('')||'<li class="note">No reminders yet.</li>';
+}
+function checkRem(){
+  const seen=JSON.parse(localStorage.getItem('cs_seen')||'[]'),now=Date.now();
+  data.reminders.forEach(r=>{const t=new Date(r.at).getTime();
+    if(t<=now&&now-t<36e5&&!seen.includes(r.id)){seen.push(r.id);ping('Reminder: '+r.text)}});
+  localStorage.setItem('cs_seen',JSON.stringify(seen.slice(-100)));
+}
+setInterval(checkRem,20000);
+
+/* Leaderboard */
+function renderLb(){
+  const r=$('#lbRange').value,from=r=='w'?wk():r=='d'?today():'0000';
+  const t={};data.logs.filter(l=>l.date>=from).forEach(l=>{const x=t[l.name]=t[l.name]||{m:0,s:0};x.m+=l.min;if(l.pomo)x.s++});
+  const rows=Object.entries(t).sort((a,b)=>b[1].m-a[1].m);
+  $('#l-lb').innerHTML=rows.map(([n,v],i)=>`<li><span class="rk">${i+1}</span><span class="g">${esc(n)}${n==me?' (you)':''}<br><small>${v.s} focus sessions</small></span><span class="min">${Math.floor(v.m/60)}h ${v.m%60}m</span></li>`).join('')||'<li class="note">No minutes logged in this period.</li>';
+}
+
+function render(){paintDays();renderPlan();renderCal();renderLog();renderRem();renderLb();checkRem()}
+render();
+</script>
+</body>
+</html>
