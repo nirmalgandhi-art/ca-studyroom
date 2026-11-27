@@ -4,119 +4,136 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>CA Study Room</title>
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;600&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 <style>
-:root{--paper:#EDF1EA;--card:#FAFCF8;--ink:#17262B;--mute:#5C6E69;--rule:#C3D2C8;--teal:#1F5F5B;--amber:#F2B632;--red:#B3412F}
+:root{--bg:#101214;--c:#22272b;--c2:#2c333a;--tx:#b6c2cf;--bl:#579dff;--am:#F2B632;--rd:#f87168}
 *{box-sizing:border-box}
-body{margin:0;background:var(--paper);color:var(--ink);font:16px/1.5 'IBM Plex Sans',system-ui,sans-serif}
-h1,h2{margin:0;font-weight:600}
-button,input,select{font:inherit;color:inherit}
-button{cursor:pointer;border:1px solid var(--teal);background:var(--teal);color:#fff;padding:.45rem .9rem;border-radius:4px}
-button.ghost{background:transparent;color:var(--teal)}
-button.x{border:0;background:none;color:var(--mute);padding:0 .4rem}
-button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid var(--amber);outline-offset:1px}
-input,select{border:1px solid var(--rule);background:#fff;padding:.45rem .6rem;border-radius:4px;min-width:0}
-.wrap{max-width:1000px;margin:0 auto;padding:1rem}
-.top{display:flex;justify-content:space-between;align-items:center;gap:1rem;flex-wrap:wrap;padding:.5rem 0 1rem}
-.top small{color:var(--mute)}
-.hero{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
-@media(max-width:700px){.hero{grid-template-columns:1fr}}
-.card{background:var(--card);border:1px solid var(--rule);border-radius:6px;padding:1rem}
-.ledger{background-image:repeating-linear-gradient(transparent 0 31px,#DCE6DE 31px 32px)}
-.num{font:500 clamp(3.5rem,12vw,5.5rem)/1 'IBM Plex Mono',monospace;color:var(--teal)}
-.clock{font:500 clamp(3rem,10vw,4.5rem)/1 'IBM Plex Mono',monospace}
-.row{display:flex;gap:.5rem;flex-wrap:wrap;align-items:center;margin:.6rem 0}
+body{margin:0;min-height:100vh;padding-bottom:96px;color:var(--tx);font:15px/1.45 Inter,system-ui,sans-serif;background:linear-gradient(135deg,#e4e9ef,#c5d0dd)}
+input,select,button{font:inherit}
+input,select{background:var(--c);color:#fff;border:1px solid #38414a;border-radius:6px;padding:.45rem .6rem;min-width:0}
+button{cursor:pointer;border:0;border-radius:6px;background:var(--c2);color:#fff;padding:.45rem .8rem}
+button.pb{background:var(--bl);color:#101214;font-weight:600}
+button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid var(--am)}
+.bar{background:#1d2125;color:#fff;display:flex;flex-wrap:wrap;gap:.5rem;align-items:center;padding:.6rem 1rem}
+.bar small{color:var(--tx)}.sp{flex:1}
+.tm{display:flex;gap:.3rem;align-items:center;flex-wrap:wrap}
+.tm b{font:600 1.3rem 'Inter';font-variant-numeric:tabular-nums;min-width:4.2rem;text-align:center}
+.tm select{max-width:150px}
+.on{box-shadow:inset 0 -3px var(--am)}
+main{padding:1rem;max-width:1200px;margin:0 auto}
+section{display:none}section.on{display:block;box-shadow:none}
+.col{background:var(--bg);border-radius:12px;padding:.8rem}
+.w{max-width:760px;margin:0 auto}
+.col h3{margin:0 0 .6rem;color:#fff;font-size:1rem;display:flex;justify-content:space-between}
+.kan{display:flex;gap:12px;align-items:flex-start;overflow-x:auto;padding-bottom:8px}
+.kan .col{flex:0 0 270px}
+.kc{background:var(--c);border-radius:8px;padding:.55rem .65rem;margin-bottom:8px;color:#dfe5ec;cursor:pointer;box-shadow:0 1px #0008}
+.kc:hover{outline:2px solid var(--bl)}.kc small{color:var(--tx)}
+.lab{display:inline-block;border-radius:4px;padding:0 .45rem;font-size:.72rem;font-weight:600;color:#fff;margin-bottom:.25rem}
+.add{width:100%;background:none;text-align:left;color:var(--tx)}.add:hover{background:var(--c)}
+.row{display:flex;gap:.5rem;flex-wrap:wrap;align-items:center;margin:0 0 .7rem}
 .row>input:first-child{flex:1}
-.modes button{background:transparent;color:var(--ink);border-color:var(--rule)}
-.modes button.on{background:var(--amber);border-color:var(--amber)}
-nav{display:flex;gap:.25rem;margin:1.2rem 0 .6rem;overflow-x:auto;border-bottom:2px solid var(--rule)}
-nav button{background:none;color:var(--mute);border:0;border-radius:0;padding:.6rem 1rem;white-space:nowrap}
-nav button.on{color:var(--ink);font-weight:600;box-shadow:inset 0 -3px var(--teal)}
-section{display:none}section.on{display:block}
 ul{list-style:none;margin:0;padding:0}
-li{display:flex;align-items:center;gap:.6rem;padding:.5rem 0;border-bottom:1px solid var(--rule)}
-li .g{flex:1}li small{color:var(--mute)}
-.done span{text-decoration:line-through;color:var(--mute)}
-.cal{display:grid;grid-template-columns:repeat(7,1fr);gap:2px}
-.cal b{font-weight:600;text-align:center;color:var(--mute);font-size:.85rem}
-.d{min-height:74px;background:#fff;border:1px solid var(--rule);padding:3px;font-size:.78rem;cursor:pointer;overflow:hidden}
-.d.t{border:2px solid var(--teal)}.d.e{background:#FBE9D9;border-color:var(--red)}.d.o{background:transparent;border-color:transparent;cursor:default}
-.ev{display:block;background:var(--amber);border-radius:3px;margin-top:2px;padding:0 3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.lb li{font-size:1.1rem}.rk{font:500 1.3rem 'IBM Plex Mono',monospace;width:2rem;color:var(--teal)}
-.min{font-family:'IBM Plex Mono',monospace}
-#gate{position:fixed;inset:0;background:rgba(23,38,43,.6);display:flex;align-items:center;justify-content:center;padding:1rem;z-index:5}
-#gate .card{max-width:380px;width:100%}#gate input{width:100%;margin:.4rem 0 .8rem}
-#alert{position:sticky;top:0;background:var(--amber);padding:.6rem 1rem;display:none;justify-content:space-between;z-index:4}
-.note{color:var(--mute);font-size:.9rem}
+li{display:flex;align-items:center;gap:.6rem;padding:.55rem 0;border-bottom:1px solid var(--c2);color:#dfe5ec}
+li .g{flex:1}li small,.note{color:var(--tx);font-size:.85rem}
+.done .g{text-decoration:line-through;opacity:.6}
+.x{background:none;padding:0 .4rem;color:var(--tx)}
+.cal{display:grid;grid-template-columns:repeat(7,1fr);gap:3px}
+.cal b{text-align:center;font-size:.8rem}
+.d{min-height:72px;background:var(--c);border:1px solid var(--c2);border-radius:4px;padding:3px;font-size:.78rem;color:#dfe5ec;cursor:pointer;overflow:hidden}
+.d.o{background:none;border:0;cursor:default}.d.t{border:2px solid var(--bl)}.d.e{border-color:var(--rd)}
+.ev{display:block;background:var(--am);color:#101214;border-radius:3px;margin-top:2px;padding:0 3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rk{font-weight:700;color:var(--am);width:1.8rem}
+.dock{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);display:flex;gap:2px;background:#1d2125;padding:6px;border-radius:12px;box-shadow:0 6px 24px #0007;max-width:calc(100% - 16px);overflow-x:auto;z-index:6}
+.dock button{background:none;color:var(--tx);display:flex;flex-direction:column;align-items:center;gap:2px;font-size:.7rem;padding:.4rem .7rem;white-space:nowrap}
+.dock i{font-size:1.1rem}.dock .on{background:#1c2b41;color:var(--bl);box-shadow:none}
+.ov{position:fixed;inset:0;background:#000a;display:flex;align-items:center;justify-content:center;padding:1rem;z-index:8}
+#modal{display:none}.mb{background:var(--bg);border-radius:12px;padding:1rem;width:100%;max-width:380px;color:#fff}
+.mb input,.mb select{width:100%;margin:.3rem 0 .8rem}
+#alert{display:none;position:sticky;top:0;z-index:7;background:var(--am);color:#101214;padding:.6rem 1rem;justify-content:space-between}
 </style>
 </head>
 <body>
-<div id="alert"><span id="alertTxt"></span><button class="ghost" onclick="this.parentNode.style.display='none'">Dismiss</button></div>
+<div id="alert"><span id="alertTxt"></span><button onclick="this.parentNode.style.display='none'">Dismiss</button></div>
 
-<div id="gate"><div class="card">
-  <h2>Join the study room</h2>
+<div id="gate" class="ov"><div class="mb">
+  <h3 style="margin-top:0">Join the study room</h3>
   <p class="note" id="modeNote"></p>
   <label>Your name<input id="gName" maxlength="20" autocomplete="off"></label>
   <label>Room code (same for all 5 of you)<input id="gRoom" maxlength="30" autocomplete="off"></label>
-  <button onclick="join()">Join</button>
+  <label>Your course<select id="gStream"><option value="CA">CA Intermediate</option><option value="CMA">CMA Intermediate</option><option value="BOTH">CA + CMA</option></select></label>
+  <button class="pb" onclick="join()">Join</button>
 </div></div>
 
-<div class="wrap">
-  <div class="top"><div><h1>CA Study Room</h1><small id="who"></small></div><button class="ghost" onclick="leave()">Switch user</button></div>
+<div id="modal" class="ov"><div class="mb">
+  <h3 style="margin-top:0" id="mT">Card</h3>
+  <label>Chapter or topic<input id="cT" maxlength="80"></label>
+  <label>Paper<select id="cP"></select></label>
+  <label>List<select id="cS"></select></label>
+  <div class="row"><button class="pb" id="cSave" onclick="saveCard()">Save</button><button onclick="closeM()">Cancel</button><button id="cDel" onclick="delCard()" style="margin-left:auto;background:#5b2b27">Delete</button></div>
+</div></div>
 
-  <div class="hero">
-    <div class="card ledger">
-      <h2>Days to exam</h2>
-      <div class="num" id="days">--</div>
-      <div class="row"><input type="date" id="exam" aria-label="Exam date"><button class="ghost" onclick="setExam()">Save exam date</button></div>
-      <div class="note">The date is shared with everyone in the room.</div>
-    </div>
-    <div class="card">
-      <h2>Focus timer</h2>
-      <div class="row modes"><button id="m-focus" class="on" onclick="setMode('focus')">Focus 25</button><button id="m-break" onclick="setMode('break')">Break 5</button></div>
-      <div class="clock" id="clock">25:00</div>
-      <div class="row"><input id="subj" placeholder="Subject (e.g. FR, Audit)" aria-label="Subject"><button id="start" onclick="go()">Start</button><button class="ghost" onclick="setMode(mode)">Reset</button></div>
-      <div class="note">A finished focus session is added to your log automatically.</div>
-    </div>
-  </div>
+<header class="bar">
+  <b>CA Study Room</b><small id="who"></small><span class="sp"></span>
+  <button id="cd" onclick="setExam()">Set exam date</button>
+  <span class="tm"><select id="subj" aria-label="Paper"></select><b id="clock">25:00</b>
+    <button id="m-focus" class="on" onclick="setMode('focus')">Focus</button><button id="m-break" onclick="setMode('break')">Break</button>
+    <button class="pb" id="start" onclick="go()">Start</button><button onclick="setMode(mode)">Reset</button></span>
+  <button onclick="leave()">Switch user</button>
+</header>
 
-  <nav id="tabs">
-    <button data-t="plan" class="on">Daily plan</button><button data-t="cal">Calendar</button><button data-t="log">Study log</button><button data-t="rem">Reminders</button><button data-t="lb">Leaderboard</button>
-  </nav>
-
-  <section id="plan" class="on card">
-    <div class="row"><input id="taskIn" placeholder="What will you finish today?"><button onclick="addTask()">Add task</button></div>
-    <ul id="l-plan"></ul>
-    <h2 style="margin-top:1.2rem;font-size:1rem">Everyone today</h2><ul id="l-team"></ul>
+<main>
+  <section id="board" class="on">
+    <div class="row"><select id="own" onchange="render()" aria-label="Whose board"><option value="me">My board</option><option value="all">Everyone's board</option></select><span class="note">Drag cards between lists, or tap a card to change its list.</span></div>
+    <div class="kan" id="kan"></div>
   </section>
 
-  <section id="cal" class="card">
-    <div class="row"><button class="ghost" onclick="mv(-1)">Previous</button><b id="mTitle" style="flex:1;text-align:center"></b><button class="ghost" onclick="mv(1)">Next</button></div>
+  <section id="plan"><div class="col w">
+    <h3>Daily plan</h3>
+    <div class="row"><input id="taskIn" placeholder="What will you finish today?"><select id="tP" aria-label="Paper"></select><button class="pb" onclick="addTask()">Add task</button></div>
+    <ul id="l-plan"></ul>
+    <h3 style="margin-top:1.2rem">Everyone today</h3><ul id="l-team"></ul>
+  </div></section>
+
+  <section id="log"><div class="col w">
+    <h3>Study log</h3>
+    <div class="row"><select id="lSub" aria-label="Paper"></select><input id="lMin" type="number" min="1" max="600" placeholder="Minutes" style="width:110px"><input id="lNote" placeholder="Note (optional)"><button class="pb" onclick="addLog()">Add</button></div>
+    <ul id="l-log"></ul>
+  </div></section>
+
+  <section id="rem"><div class="col w">
+    <h3>Reminders</h3>
+    <div class="row"><input id="rTxt" placeholder="Reminder (e.g. Mock test at 6pm)"><input id="rAt" type="datetime-local"><button class="pb" onclick="addRem()">Add</button></div>
+    <p class="note">Reminders alert everyone while the site is open in a tab.</p>
+    <ul id="l-rem"></ul>
+  </div></section>
+
+  <section id="lb"><div class="col w">
+    <h3>Focus leaderboard</h3>
+    <div class="row"><select id="lbRange" onchange="render()"><option value="w">This week</option><option value="d">Today</option><option value="a">All time</option></select></div>
+    <ul id="l-lb"></ul>
+  </div></section>
+
+  <section id="cal"><div class="col w">
+    <div class="row"><button onclick="mv(-1)">Previous</button><b id="mTitle" style="flex:1;text-align:center;color:#fff"></b><button onclick="mv(1)">Next</button></div>
     <div class="cal" id="grid"></div>
     <p class="note">Tap a day to add an event for the whole room. Tap an event to delete it.</p>
-  </section>
+  </div></section>
+</main>
 
-  <section id="log" class="card">
-    <div class="row"><input id="lSub" placeholder="Subject"><input id="lMin" type="number" min="1" max="600" placeholder="Minutes" style="width:110px"><input id="lNote" placeholder="Note (optional)"><button onclick="addLog()">Add to log</button></div>
-    <ul id="l-log"></ul>
-  </section>
-
-  <section id="rem" class="card">
-    <div class="row"><input id="rTxt" placeholder="Reminder (e.g. Mock test at 6pm)"><input id="rAt" type="datetime-local"><button onclick="addRem()">Add reminder</button></div>
-    <p class="note">Reminders show up for everyone while the site is open in a tab.</p>
-    <ul id="l-rem"></ul>
-  </section>
-
-  <section id="lb" class="card">
-    <div class="row"><select id="lbRange" onchange="render()"><option value="w">This week</option><option value="d">Today</option><option value="a">All time</option></select></div>
-    <ul class="lb" id="l-lb"></ul>
-  </section>
-</div>
+<nav class="dock" id="dock">
+  <button data-t="plan"><i class="fa-solid fa-list-check"></i>Daily Plan</button>
+  <button data-t="log"><i class="fa-solid fa-book-open"></i>Study Log</button>
+  <button data-t="rem"><i class="fa-regular fa-bell"></i>Reminders</button>
+  <button data-t="lb"><i class="fa-solid fa-trophy"></i>Leaderboard</button>
+  <button data-t="cal"><i class="fa-regular fa-calendar"></i>Planner</button>
+  <button data-t="board" class="on"><i class="fa-solid fa-table-columns"></i>Board</button>
+</nav>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/10.12.2/firebase-app-compat.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/10.12.2/firebase-firestore-compat.min.js"></script>
 <script>
-/* PASTE YOUR FIREBASE CONFIG HERE (see setup steps). Leave as null to test on one device only. */
 const FIREBASE_CONFIG = {
   apiKey: "AIzaSyCcuzKAa48Zc2vX2HKX0fZTKDTtT7XuHtg",
   authDomain: "my-personal-project-f2dfd.firebaseapp.com",
@@ -125,15 +142,28 @@ const FIREBASE_CONFIG = {
   messagingSenderId: "88296209743",
   appId: "1:88296209743:web:86d7f995b619de74db593a"
 };
-/* e.g. const FIREBASE_CONFIG = {apiKey:"...",authDomain:"...",projectId:"...",appId:"..."}; */
+/* Papers and statuses come from your CA / CMA Inter tracker */
+const PAPERS=[
+['CA_P01','CA 01','Advanced Accounting','#4f46e5'],['CA_P02','CA 02','Corporate and Other Laws','#0284c7'],['CA_P03','CA 03','Taxation (Income Tax & GST)','#2563eb'],
+['CA_P04','CA 04','Cost and Management Accounting','#7c3aed'],['CA_P05','CA 05','Auditing and Ethics','#9333ea'],['CA_P06','CA 06','Financial Management and Strategic Management','#db2777'],
+['CMA_P05','CMA 05','Business Laws and Ethics','#059669'],['CMA_P06','CMA 06','Financial Accounting','#0d9488'],['CMA_P07','CMA 07','Direct and Indirect Taxation','#10b981'],
+['CMA_P08','CMA 08','Cost Accounting','#047857'],['CMA_P09','CMA 09','Operations Management and Strategic Management','#14b8a6'],['CMA_P10','CMA 10','Corporate Accounting and Auditing','#0f766e'],
+['CMA_P11','CMA 11','Financial Management and Business Data Analytics','#16a34a'],['CMA_P12','CMA 12','Management Accounting','#15803d']
+].map(([id,c,n,k])=>({id,c,n,k}));
+const ST=['Not Started','In Progress','Revision 1','Completed'];
 
 const $=s=>document.querySelector(s),esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const today=()=>new Date().toLocaleDateString('en-CA');
 const wk=()=>{const d=new Date();d.setDate(d.getDate()-((d.getDay()+6)%7));return d.toLocaleDateString('en-CA')};
-const cols=['plan','logs','events','reminders'];
-const data={plan:[],logs:[],events:[],reminders:[]};let cfg={};
-let me=localStorage.getItem('cs_me')||'',room=localStorage.getItem('cs_room')||'',store;
-$('#modeNote').textContent=FIREBASE_CONFIG?'Your data is shared live with everyone using this room code.':'Test mode: data stays on this device only. Add your Firebase config to share between all 5 of you.';
+const cols=['plan','logs','events','reminders','cards'];
+const data={plan:[],logs:[],events:[],reminders:[],cards:[]};let cfg={};
+let me=localStorage.getItem('cs_me')||'',room=localStorage.getItem('cs_room')||'',stream=localStorage.getItem('cs_stream')||'CA',store;
+$('#modeNote').textContent=FIREBASE_CONFIG?'Your data is shared live with everyone using this room code.':'Test mode: data stays on this device only.';
+
+const pl=()=>PAPERS.filter(p=>stream=='BOTH'||p.id.startsWith(stream+'_'));
+const optsName=()=>pl().map(p=>`<option>${esc(p.n)}</option>`).join('')+'<option>Other</option>';
+const optsId=s=>'<option value="">No paper</option>'+PAPERS.filter(p=>pl().includes(p)||p.id==s).map(p=>`<option value="${p.id}"${p.id==s?' selected':''}>${p.c} · ${esc(p.n)}</option>`).join('');
+const lab=n=>{const p=PAPERS.find(x=>x.n==n);return p?`<span class="lab" style="background:${p.k}">${esc(p.n)}</span>`:''};
 
 function initStore(){
   if(FIREBASE_CONFIG){
@@ -166,24 +196,28 @@ function initStore(){
 function join(){
   const n=$('#gName').value.trim(),r=$('#gRoom').value.trim().toLowerCase().replace(/[^a-z0-9_-]/g,'');
   if(!n||!r){alert('Enter your name and a room code (letters and numbers).');return}
-  localStorage.setItem('cs_me',n);localStorage.setItem('cs_room',r);location.reload();
+  localStorage.setItem('cs_me',n);localStorage.setItem('cs_room',r);localStorage.setItem('cs_stream',$('#gStream').value);location.reload();
 }
 function leave(){localStorage.removeItem('cs_me');localStorage.removeItem('cs_room');location.reload()}
-if(me&&room){$('#gate').style.display='none';$('#who').textContent=me+' in room "'+room+'"';initStore()}
-else{$('#gName').value=me;$('#gRoom').value=room}
+function ui(){
+  $('#subj').innerHTML=optsName();$('#lSub').innerHTML=optsName();
+  $('#tP').innerHTML='<option value="">Paper (optional)</option>'+optsName();
+  $('#cS').innerHTML=ST.map(s=>`<option>${s}</option>`).join('');
+}
+if(me&&room){$('#gate').style.display='none';$('#who').textContent=me+' · room "'+room+'"';ui();initStore()}
+else{$('#gName').value=me;$('#gRoom').value=room;$('#gStream').value=stream}
 
-/* Tabs */
-$('#tabs').onclick=e=>{const t=e.target.dataset.t;if(!t)return;
-  document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('on',b===e.target));
-  document.querySelectorAll('section').forEach(s=>s.classList.toggle('on',s.id===t));};
+$('#dock').onclick=e=>{const b=e.target.closest('button');if(!b)return;
+  document.querySelectorAll('.dock button').forEach(x=>x.classList.toggle('on',x===b));
+  document.querySelectorAll('section').forEach(s=>s.classList.toggle('on',s.id===b.dataset.t));};
 
-/* Countdown */
-function setExam(){const v=$('#exam').value;if(v)store.setCfg({exam:v})}
+/* Exam countdown */
+function setExam(){const v=prompt('Exam date (YYYY-MM-DD):',cfg.exam||'');if(/^\d{4}-\d\d-\d\d$/.test(v||''))store.setCfg({exam:v})}
 function paintDays(){
-  if(!cfg.exam){$('#days').textContent='--';return}
-  $('#exam').value=cfg.exam;
+  if(!cfg.exam){$('#cd').textContent='Set exam date';return}
   const t=new Date();t.setHours(0,0,0,0);
-  $('#days').textContent=Math.max(0,Math.round((new Date(cfg.exam+'T00:00')-t)/864e5));
+  const n=Math.round((new Date(cfg.exam+'T00:00')-t)/864e5);
+  $('#cd').textContent=n>0?n+' days to exam':n==0?'Exam day':'Exam date passed';
 }
 
 /* Pomodoro */
@@ -199,7 +233,7 @@ function go(){
 }
 function finish(){
   const was=mode;
-  if(was=='focus'&&me)store.add('logs',{name:me,subject:$('#subj').value.trim()||'Focus session',min:D.focus,date:today(),pomo:1});
+  if(was=='focus'&&me)store.add('logs',{name:me,subject:$('#subj').value||'Focus session',min:D.focus,date:today(),pomo:1});
   ping(was=='focus'?'Focus session done. Take a 5 minute break.':'Break over. Back to work.');
   setMode(was=='focus'?'break':'focus');
 }
@@ -209,17 +243,41 @@ function ping(msg){
   if('Notification' in window&&Notification.permission==='granted')new Notification('CA Study Room',{body:msg});
 }
 
+/* Kanban board */
+function renderBoard(){
+  const all=$('#own').value=='all',cs=data.cards.filter(c=>all||c.name==me);
+  $('#kan').innerHTML=ST.map(s=>{
+    const l=cs.filter(c=>c.status==s).sort((a,b)=>a.ts-b.ts);
+    return `<div class="col" ondragover="event.preventDefault()" ondrop="drop(event,'${s}')"><h3>${s}<span class="note">${l.length}</span></h3>${l.map(c=>{const p=PAPERS.find(x=>x.id==c.paper);
+      return `<div class="kc" draggable="${c.name==me}" ondragstart="event.dataTransfer.setData('t','${c.id}')" onclick="openCard('${c.id}')">${p?lab(p.n):''}<div>${esc(c.title)}</div>${all?`<small>${esc(c.name)}</small>`:''}</div>`}).join('')}<button class="add" onclick="openCard('','${s}')">+ Add a card</button></div>`}).join('');
+}
+function drop(e,s){e.preventDefault();const c=data.cards.find(x=>x.id==e.dataTransfer.getData('t'));if(c&&c.name==me&&c.status!=s)store.upd('cards',c.id,{status:s})}
+let editId='';
+function openCard(id,s){
+  editId=id;const c=id?data.cards.find(x=>x.id==id):{},mine=!id||c.name==me;
+  $('#mT').textContent=id?(mine?'Edit card':'Card by '+c.name):'New card';
+  $('#cT').value=c.title||'';$('#cP').innerHTML=optsId(c.paper||'');$('#cS').value=c.status||s||ST[0];
+  $('#cSave').style.display=mine?'':'none';$('#cDel').style.display=id&&mine?'':'none';
+  ['#cT','#cP','#cS'].forEach(i=>$(i).disabled=!mine);
+  $('#modal').style.display='flex';$('#cT').focus();
+}
+function closeM(){$('#modal').style.display='none'}
+function saveCard(){const t=$('#cT').value.trim();if(!t)return;
+  const o={title:t,paper:$('#cP').value,status:$('#cS').value};
+  editId?store.upd('cards',editId,o):store.add('cards',{...o,name:me});closeM()}
+function delCard(){if(confirm('Delete this card?')){store.del('cards',editId);closeM()}}
+
 /* Daily plan */
-function addTask(){const t=$('#taskIn').value.trim();if(!t)return;store.add('plan',{name:me,text:t,date:today(),done:false});$('#taskIn').value=''}
+function addTask(){const t=$('#taskIn').value.trim();if(!t)return;store.add('plan',{name:me,text:t,paper:$('#tP').value,date:today(),done:false});$('#taskIn').value=''}
 $('#taskIn').onkeydown=e=>{if(e.key=='Enter')addTask()};
 function renderPlan(){
   const mine=data.plan.filter(p=>p.name==me&&p.date==today()).sort((a,b)=>a.ts-b.ts);
-  $('#l-plan').innerHTML=mine.map(p=>`<li class="${p.done?'done':''}"><input type="checkbox" ${p.done?'checked':''} onchange="store.upd('plan','${p.id}',{done:this.checked})" aria-label="Done"><span class="g"><span>${esc(p.text)}</span></span><button class="x" onclick="store.del('plan','${p.id}')" aria-label="Delete task">✕</button></li>`).join('')||'<li class="note">No tasks yet. Add your first one above.</li>';
+  $('#l-plan').innerHTML=mine.map(p=>`<li class="${p.done?'done':''}"><input type="checkbox" ${p.done?'checked':''} onchange="store.upd('plan','${p.id}',{done:this.checked})" aria-label="Done"><span class="g">${p.paper?lab(p.paper)+'<br>':''}${esc(p.text)}</span><button class="x" onclick="store.del('plan','${p.id}')" aria-label="Delete task">✕</button></li>`).join('')||'<li class="note">No tasks yet. Add your first one above.</li>';
   const by={};data.plan.filter(p=>p.date==today()).forEach(p=>{(by[p.name]=by[p.name]||[0,0])[1]++;if(p.done)by[p.name][0]++});
-  $('#l-team').innerHTML=Object.entries(by).map(([n,v])=>`<li><span class="g">${esc(n)}</span><span class="min">${v[0]}/${v[1]} done</span></li>`).join('')||'<li class="note">Nobody has planned today yet.</li>';
+  $('#l-team').innerHTML=Object.entries(by).map(([n,v])=>`<li><span class="g">${esc(n)}</span>${v[0]}/${v[1]} done</li>`).join('')||'<li class="note">Nobody has planned today yet.</li>';
 }
 
-/* Calendar */
+/* Planner (calendar) */
 let cm=new Date();cm.setDate(1);
 function mv(n){cm.setMonth(cm.getMonth()+n);renderCal()}
 function renderCal(){
@@ -230,29 +288,28 @@ function renderCal(){
   for(let d=1;d<=n;d++){
     const ds=`${y}-${String(m+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
     const ev=data.events.filter(e=>e.date==ds),ex=cfg.exam==ds;
-    h+=`<div class="d ${ds==today()?'t':''} ${ex?'e':''}" onclick="addEv('${ds}')">${d}${ex?' <b style="color:var(--red)">Exam</b>':''}${ev.map(e=>`<span class="ev" title="${esc(e.text)}" onclick="event.stopPropagation();delEv('${e.id}','${esc(e.text).replace(/'/g,'')}')">${esc(e.text)}</span>`).join('')}</div>`;
+    h+=`<div class="d ${ds==today()?'t':''} ${ex?'e':''}" onclick="addEv('${ds}')">${d}${ex?' <b style="color:var(--rd)">Exam</b>':''}${ev.map(e=>`<span class="ev" title="${esc(e.text)}" onclick="event.stopPropagation();delEv('${e.id}')">${esc(e.text)}</span>`).join('')}</div>`;
   }
   $('#grid').innerHTML=h;
 }
 function addEv(ds){const t=prompt('Event for '+ds+' (e.g. Mock test, Group revision):');if(t&&t.trim())store.add('events',{date:ds,text:t.trim(),name:me})}
-function delEv(id,t){if(confirm('Delete "'+t+'"?'))store.del('events',id)}
+function delEv(id){const e=data.events.find(x=>x.id==id);if(e&&confirm('Delete "'+e.text+'"?'))store.del('events',id)}
 
 /* Study log */
 function addLog(){
-  const s=$('#lSub').value.trim(),m=parseInt($('#lMin').value,10);
-  if(!s||!m||m<1){alert('Enter a subject and the minutes studied.');return}
-  store.add('logs',{name:me,subject:s,min:m,note:$('#lNote').value.trim(),date:today()});
-  ['#lSub','#lMin','#lNote'].forEach(i=>$(i).value='');
+  const m=parseInt($('#lMin').value,10);
+  if(!m||m<1){alert('Enter the minutes studied.');return}
+  store.add('logs',{name:me,subject:$('#lSub').value,min:m,note:$('#lNote').value.trim(),date:today()});
+  $('#lMin').value='';$('#lNote').value='';
 }
 function renderLog(){
-  $('#l-log').innerHTML=[...data.logs].sort((a,b)=>b.ts-a.ts).slice(0,40).map(l=>`<li><span class="g"><b>${esc(l.name)}</b> studied ${esc(l.subject)}${l.note?' <small>– '+esc(l.note)+'</small>':''}<br><small>${l.date}${l.pomo?' · focus session':''}</small></span><span class="min">${l.min} min</span>${l.name==me?`<button class="x" onclick="store.del('logs','${l.id}')" aria-label="Delete entry">✕</button>`:''}</li>`).join('')||'<li class="note">No study sessions logged yet.</li>';
+  $('#l-log').innerHTML=[...data.logs].sort((a,b)=>b.ts-a.ts).slice(0,40).map(l=>`<li><span class="g"><b>${esc(l.name)}</b> ${lab(l.subject)||esc(l.subject)}${l.note?' <small>– '+esc(l.note)+'</small>':''}<br><small>${l.date}${l.pomo?' · focus session':''}</small></span>${l.min} min${l.name==me?`<button class="x" onclick="store.del('logs','${l.id}')" aria-label="Delete entry">✕</button>`:''}</li>`).join('')||'<li class="note">No study sessions logged yet.</li>';
 }
 
 /* Reminders */
 function addRem(){const t=$('#rTxt').value.trim(),a=$('#rAt').value;if(!t||!a){alert('Add the reminder text and a date and time.');return}store.add('reminders',{text:t,at:a,name:me});$('#rTxt').value=''}
 function renderRem(){
-  const now=new Date().toISOString().slice(0,16),list=[...data.reminders].sort((a,b)=>a.at<b.at?-1:1);
-  $('#l-rem').innerHTML=list.map(r=>`<li><span class="g">${esc(r.text)}<br><small>${r.at.replace('T',' ')} · added by ${esc(r.name)}</small></span>${new Date(r.at)<new Date()?'<small>Past</small>':''}<button class="x" onclick="store.del('reminders','${r.id}')" aria-label="Delete reminder">✕</button></li>`).join('')||'<li class="note">No reminders yet.</li>';
+  $('#l-rem').innerHTML=[...data.reminders].sort((a,b)=>a.at<b.at?-1:1).map(r=>`<li><span class="g">${esc(r.text)}<br><small>${r.at.replace('T',' ')} · added by ${esc(r.name)}</small></span>${new Date(r.at)<new Date()?'<small>Past</small>':''}<button class="x" onclick="store.del('reminders','${r.id}')" aria-label="Delete reminder">✕</button></li>`).join('')||'<li class="note">No reminders yet.</li>';
 }
 function checkRem(){
   const seen=JSON.parse(localStorage.getItem('cs_seen')||'[]'),now=Date.now();
@@ -266,11 +323,10 @@ setInterval(checkRem,20000);
 function renderLb(){
   const r=$('#lbRange').value,from=r=='w'?wk():r=='d'?today():'0000';
   const t={};data.logs.filter(l=>l.date>=from).forEach(l=>{const x=t[l.name]=t[l.name]||{m:0,s:0};x.m+=l.min;if(l.pomo)x.s++});
-  const rows=Object.entries(t).sort((a,b)=>b[1].m-a[1].m);
-  $('#l-lb').innerHTML=rows.map(([n,v],i)=>`<li><span class="rk">${i+1}</span><span class="g">${esc(n)}${n==me?' (you)':''}<br><small>${v.s} focus sessions</small></span><span class="min">${Math.floor(v.m/60)}h ${v.m%60}m</span></li>`).join('')||'<li class="note">No minutes logged in this period.</li>';
+  $('#l-lb').innerHTML=Object.entries(t).sort((a,b)=>b[1].m-a[1].m).map(([n,v],i)=>`<li><span class="rk">${i+1}</span><span class="g">${esc(n)}${n==me?' (you)':''}<br><small>${v.s} focus sessions</small></span>${Math.floor(v.m/60)}h ${v.m%60}m</li>`).join('')||'<li class="note">No minutes logged in this period.</li>';
 }
 
-function render(){paintDays();renderPlan();renderCal();renderLog();renderRem();renderLb();checkRem()}
+function render(){paintDays();renderBoard();renderPlan();renderCal();renderLog();renderRem();renderLb();checkRem()}
 render();
 </script>
 </body>
