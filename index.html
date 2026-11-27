@@ -7,49 +7,58 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 <style>
-:root{--bg:#101214;--c:#22272b;--c2:#2c333a;--tx:#b6c2cf;--bl:#579dff;--am:#F2B632;--rd:#f87168}
+:root{--bg:#EADFC8;--c:#FFFCF5;--c2:#D8CCB0;--tx:#6B5F4B;--ink:#2B2418;--bl:#1F5F5B;--am:#E3A82B;--rd:#B3412F}
 *{box-sizing:border-box}
-body{margin:0;min-height:100vh;padding-bottom:96px;color:var(--tx);font:15px/1.45 Inter,system-ui,sans-serif;background:linear-gradient(135deg,#e4e9ef,#c5d0dd)}
+body{margin:0;min-height:100vh;padding-bottom:96px;color:var(--tx);font:15px/1.45 Inter,system-ui,sans-serif;background:linear-gradient(135deg,#F7F1E3,#EFE6D2)}
 input,select,button{font:inherit}
-input,select{background:var(--c);color:#fff;border:1px solid #38414a;border-radius:6px;padding:.45rem .6rem;min-width:0}
-button{cursor:pointer;border:0;border-radius:6px;background:var(--c2);color:#fff;padding:.45rem .8rem}
-button.pb{background:var(--bl);color:#101214;font-weight:600}
+input,select{background:var(--c);color:var(--ink);border:1px solid var(--c2);border-radius:6px;padding:.45rem .6rem;min-width:0}
+button{cursor:pointer;border:0;border-radius:6px;background:var(--c2);color:var(--ink);padding:.45rem .8rem}
+button.pb{background:var(--bl);color:#fff;font-weight:600}
 button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid var(--am)}
-.bar{background:#1d2125;color:#fff;display:flex;flex-wrap:wrap;gap:.5rem;align-items:center;padding:.6rem 1rem}
+.bar{background:#FBF7EE;border-bottom:1px solid var(--c2);color:var(--ink);display:flex;flex-wrap:wrap;gap:.5rem;align-items:center;padding:.6rem 1rem}
 .bar small{color:var(--tx)}.sp{flex:1}
-.tm{display:flex;gap:.3rem;align-items:center;flex-wrap:wrap}
-.tm b{font:600 1.3rem 'Inter';font-variant-numeric:tabular-nums;min-width:4.2rem;text-align:center}
-.tm select{max-width:150px}
+.hero{position:relative;max-width:1200px;margin:1rem auto 0;border-radius:16px;overflow:hidden;background:rgba(255,252,245,.72);border:1px solid rgba(135,206,235,.75);box-shadow:0 0 28px rgba(135,206,235,.55),0 8px 30px rgba(110,170,210,.25)}
+.glow{position:absolute;inset:-30%;background:radial-gradient(circle at 12% 30%,rgba(135,206,235,.65),transparent 38%),radial-gradient(circle at 88% 70%,rgba(135,206,235,.55),transparent 42%);filter:blur(28px);pointer-events:none}
+.hin{position:relative;display:grid;grid-template-columns:1fr 1fr 1.2fr;backdrop-filter:blur(10px)}
+.hin>div{padding:.8rem 1rem}.hin>div+div{border-left:1px solid rgba(135,206,235,.55)}
+@media(max-width:760px){.hero{margin:1rem .5rem 0}.hin{grid-template-columns:1fr}.hin>div+div{border-left:0;border-top:1px solid rgba(135,206,235,.55)}}
+.hh{display:flex;align-items:center;gap:.4rem;flex-wrap:wrap;margin-bottom:.5rem;color:var(--ink)}.hh .note{flex:1;font-size:.75rem}
+button.sm{padding:.2rem .55rem;font-size:.78rem}
+.tiles{display:flex;gap:6px}
+.tl{flex:1;max-width:64px;text-align:center;background:rgba(255,255,255,.6);border:1px solid rgba(135,206,235,.85);border-radius:8px;padding:.25rem 0;box-shadow:0 0 12px rgba(135,206,235,.65)}
+.tl b{display:block;font:700 1.1rem/1.25 Inter;color:#1b6a9c;font-variant-numeric:tabular-nums}.tl small{font-size:.62rem;color:var(--tx)}
+.clock{font:700 clamp(2rem,6vw,2.6rem)/1.1 Inter;color:var(--ink);font-variant-numeric:tabular-nums;margin:.2rem 0 .5rem}
+.hin select{flex:1;min-width:0}.hin .row{margin:0}
 .on{box-shadow:inset 0 -3px var(--am)}
 main{padding:1rem;max-width:1200px;margin:0 auto}
 section{display:none}section.on{display:block;box-shadow:none}
 .col{background:var(--bg);border-radius:12px;padding:.8rem}
 .w{max-width:760px;margin:0 auto}
-.col h3{margin:0 0 .6rem;color:#fff;font-size:1rem;display:flex;justify-content:space-between}
+.col h3{margin:0 0 .6rem;color:var(--ink);font-size:1rem;display:flex;justify-content:space-between}
 .kan{display:flex;gap:12px;align-items:flex-start;overflow-x:auto;padding-bottom:8px}
 .kan .col{flex:0 0 270px}
-.kc{background:var(--c);border-radius:8px;padding:.55rem .65rem;margin-bottom:8px;color:#dfe5ec;cursor:pointer;box-shadow:0 1px #0008}
+.kc{background:var(--c);border-radius:8px;padding:.55rem .65rem;margin-bottom:8px;color:var(--ink);cursor:pointer;box-shadow:0 1px 2px #0003}
 .kc:hover{outline:2px solid var(--bl)}.kc small{color:var(--tx)}
 .lab{display:inline-block;border-radius:4px;padding:0 .45rem;font-size:.72rem;font-weight:600;color:#fff;margin-bottom:.25rem}
 .add{width:100%;background:none;text-align:left;color:var(--tx)}.add:hover{background:var(--c)}
 .row{display:flex;gap:.5rem;flex-wrap:wrap;align-items:center;margin:0 0 .7rem}
 .row>input:first-child{flex:1}
 ul{list-style:none;margin:0;padding:0}
-li{display:flex;align-items:center;gap:.6rem;padding:.55rem 0;border-bottom:1px solid var(--c2);color:#dfe5ec}
+li{display:flex;align-items:center;gap:.6rem;padding:.55rem 0;border-bottom:1px solid var(--c2);color:var(--ink)}
 li .g{flex:1}li small,.note{color:var(--tx);font-size:.85rem}
 .done .g{text-decoration:line-through;opacity:.6}
 .x{background:none;padding:0 .4rem;color:var(--tx)}
 .cal{display:grid;grid-template-columns:repeat(7,1fr);gap:3px}
 .cal b{text-align:center;font-size:.8rem}
-.d{min-height:72px;background:var(--c);border:1px solid var(--c2);border-radius:4px;padding:3px;font-size:.78rem;color:#dfe5ec;cursor:pointer;overflow:hidden}
+.d{min-height:72px;background:var(--c);border:1px solid var(--c2);border-radius:4px;padding:3px;font-size:.78rem;color:var(--ink);cursor:pointer;overflow:hidden}
 .d.o{background:none;border:0;cursor:default}.d.t{border:2px solid var(--bl)}.d.e{border-color:var(--rd)}
 .ev{display:block;background:var(--am);color:#101214;border-radius:3px;margin-top:2px;padding:0 3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .rk{font-weight:700;color:var(--am);width:1.8rem}
-.dock{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);display:flex;gap:2px;background:#1d2125;padding:6px;border-radius:12px;box-shadow:0 6px 24px #0007;max-width:calc(100% - 16px);overflow-x:auto;z-index:6}
+.dock{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);display:flex;gap:2px;background:#FBF7EE;border:1px solid var(--c2);padding:6px;border-radius:12px;box-shadow:0 6px 24px #0003;max-width:calc(100% - 16px);overflow-x:auto;z-index:6}
 .dock button{background:none;color:var(--tx);display:flex;flex-direction:column;align-items:center;gap:2px;font-size:.7rem;padding:.4rem .7rem;white-space:nowrap}
-.dock i{font-size:1.1rem}.dock .on{background:#1c2b41;color:var(--bl);box-shadow:none}
+.dock i{font-size:1.1rem}.dock .on{background:#DCEBE7;color:var(--bl);box-shadow:none}
 .ov{position:fixed;inset:0;background:#000a;display:flex;align-items:center;justify-content:center;padding:1rem;z-index:8}
-#modal{display:none}.mb{background:var(--bg);border-radius:12px;padding:1rem;width:100%;max-width:380px;color:#fff}
+#modal{display:none}.mb{background:var(--bg);border-radius:12px;padding:1rem;width:100%;max-width:380px;color:var(--ink)}
 .mb input,.mb select{width:100%;margin:.3rem 0 .8rem}
 #alert{display:none;position:sticky;top:0;z-index:7;background:var(--am);color:#101214;padding:.6rem 1rem;justify-content:space-between}
 </style>
@@ -71,18 +80,18 @@ li .g{flex:1}li small,.note{color:var(--tx);font-size:.85rem}
   <label>Chapter or topic<input id="cT" maxlength="80"></label>
   <label>Paper<select id="cP"></select></label>
   <label>List<select id="cS"></select></label>
-  <div class="row"><button class="pb" id="cSave" onclick="saveCard()">Save</button><button onclick="closeM()">Cancel</button><button id="cDel" onclick="delCard()" style="margin-left:auto;background:#5b2b27">Delete</button></div>
+  <div class="row"><button class="pb" id="cSave" onclick="saveCard()">Save</button><button onclick="closeM()">Cancel</button><button id="cDel" onclick="delCard()" style="margin-left:auto;background:#B3412F;color:#fff">Delete</button></div>
 </div></div>
 
-<header class="bar">
-  <b>CA Study Room</b><small id="who"></small><span class="sp"></span>
-  <button id="cd" onclick="setExam()">Set exam date</button>
-  <span class="tm"><select id="subj" aria-label="Paper"></select><b id="clock">25:00</b>
-    <button id="m-focus" class="on" onclick="setMode('focus')">Focus</button><button id="m-break" onclick="setMode('break')">Break</button>
-    <button class="pb" id="start" onclick="go()">Start</button><button onclick="setMode(mode)">Reset</button></span>
-  <button onclick="leave()">Switch user</button>
-</header>
+<header class="bar"><b>CA Study Room</b><small id="who"></small><span class="sp"></span><button onclick="leave()">Switch user</button></header>
 
+<div class="hero"><div class="glow"></div><div class="hin">
+  <div><div class="hh"><b>CA Inter exam</b><span class="note" id="t-CA"></span><button class="sm" onclick="setExam('CA')">Set date</button></div><div class="tiles" id="tl-CA"></div></div>
+  <div><div class="hh"><b>CMA Inter exam</b><span class="note" id="t-CMA"></span><button class="sm" onclick="setExam('CMA')">Set date</button></div><div class="tiles" id="tl-CMA"></div></div>
+  <div><div class="hh"><b>Pomodoro</b><span class="sp"></span><button id="m-focus" class="sm on" onclick="setMode('focus')">Focus 25</button><button id="m-break" class="sm" onclick="setMode('break')">Break 5</button></div>
+    <div class="clock" id="clock">25:00</div>
+    <div class="row"><select id="subj" aria-label="Paper"></select><button class="pb" id="start" onclick="go()">Start</button><button onclick="setMode(mode)">Reset</button></div></div>
+</div></div>
 <main>
   <section id="board" class="on">
     <div class="row"><select id="own" onchange="render()" aria-label="Whose board"><option value="me">My board</option><option value="all">Everyone's board</option></select><span class="note">Drag cards between lists, or tap a card to change its list.</span></div>
@@ -116,7 +125,7 @@ li .g{flex:1}li small,.note{color:var(--tx);font-size:.85rem}
   </div></section>
 
   <section id="cal"><div class="col w">
-    <div class="row"><button onclick="mv(-1)">Previous</button><b id="mTitle" style="flex:1;text-align:center;color:#fff"></b><button onclick="mv(1)">Next</button></div>
+    <div class="row"><button onclick="mv(-1)">Previous</button><b id="mTitle" style="flex:1;text-align:center;color:var(--ink)"></b><button onclick="mv(1)">Next</button></div>
     <div class="cal" id="grid"></div>
     <p class="note">Tap a day to add an event for the whole room. Tap an event to delete it.</p>
   </div></section>
@@ -212,13 +221,15 @@ $('#dock').onclick=e=>{const b=e.target.closest('button');if(!b)return;
   document.querySelectorAll('section').forEach(s=>s.classList.toggle('on',s.id===b.dataset.t));};
 
 /* Exam countdown */
-function setExam(){const v=prompt('Exam date (YYYY-MM-DD):',cfg.exam||'');if(/^\d{4}-\d\d-\d\d$/.test(v||''))store.setCfg({exam:v})}
+function setExam(k){const key='exam'+k,v=prompt(k+' Inter exam date (YYYY-MM-DD):',cfg[key]||'');if(/^\d{4}-\d\d-\d\d$/.test(v||''))store.setCfg({[key]:v})}
 function paintDays(){
-  if(!cfg.exam){$('#cd').textContent='Set exam date';return}
-  const t=new Date();t.setHours(0,0,0,0);
-  const n=Math.round((new Date(cfg.exam+'T00:00')-t)/864e5);
-  $('#cd').textContent=n>0?n+' days to exam':n==0?'Exam day':'Exam date passed';
+  ['CA','CMA'].forEach(k=>{const v=cfg['exam'+k];let x=[['Days','--'],['Hrs','--'],['Min','--'],['Sec','--']],t='Date not set';
+    if(v){const ms=new Date(v+'T09:00:00')-Date.now(),p=n=>String(n).padStart(2,'0');
+      if(ms>0){x=[['Days',Math.floor(ms/864e5)],['Hrs',p(Math.floor(ms/36e5)%24)],['Min',p(Math.floor(ms/6e4)%60)],['Sec',p(Math.floor(ms/1e3)%60)]];t=v}
+      else{x=x.map(a=>[a[0],'00']);t='Passed · '+v}}
+    $('#tl-'+k).innerHTML=x.map(a=>`<div class="tl"><b>${a[1]}</b><small>${a[0]}</small></div>`).join('');$('#t-'+k).textContent=t});
 }
+setInterval(paintDays,1000);
 
 /* Pomodoro */
 const D={focus:25,break:5};let mode='focus',left=1500,end=0,tick=null;
@@ -287,8 +298,8 @@ function renderCal(){
   for(let i=0;i<first;i++)h+='<div class="d o"></div>';
   for(let d=1;d<=n;d++){
     const ds=`${y}-${String(m+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
-    const ev=data.events.filter(e=>e.date==ds),ex=cfg.exam==ds;
-    h+=`<div class="d ${ds==today()?'t':''} ${ex?'e':''}" onclick="addEv('${ds}')">${d}${ex?' <b style="color:var(--rd)">Exam</b>':''}${ev.map(e=>`<span class="ev" title="${esc(e.text)}" onclick="event.stopPropagation();delEv('${e.id}')">${esc(e.text)}</span>`).join('')}</div>`;
+    const ev=data.events.filter(e=>e.date==ds),ex=(cfg.examCA==ds?'CA Exam ':'')+(cfg.examCMA==ds?'CMA Exam':'');
+    h+=`<div class="d ${ds==today()?'t':''} ${ex?'e':''}" onclick="addEv('${ds}')">${d}${ex?' <b style="color:var(--rd)">'+ex+'</b>':''}${ev.map(e=>`<span class="ev" title="${esc(e.text)}" onclick="event.stopPropagation();delEv('${e.id}')">${esc(e.text)}</span>`).join('')}</div>`;
   }
   $('#grid').innerHTML=h;
 }
